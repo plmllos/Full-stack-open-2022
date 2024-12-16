@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import personService from "./services/persons";
-import Filter from "./Filter";
-import PersonForm from "./PersonForm";
-import Persons from "./Persons";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [query, setQuery] = useState("");
-
+  const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState("success");
   useEffect(() => {
     personService.getAll().then((response) => {
       setPersons(response.data);
@@ -43,11 +45,21 @@ const App = () => {
                 person.id === duplicatePerson.id ? response.data : person
               )
             );
+            setMessage(
+              `Number of ${newPerson.name} has been updated to ${newPerson.number}`
+            );
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
           });
       }
     } else {
       personService.create(newPerson).then((response) => {
         setPersons(persons.concat(response.data));
+        setMessage(`Added ${newPerson.name}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       });
     }
 
@@ -65,10 +77,22 @@ const App = () => {
   const deletePerson = (id) => {
     const personToDelete = persons.find((person) => person.id === id);
 
-    if (window.confirm(`Delete ${personToDelete.name}`)) {
+    if (window.confirm(`Delete ${personToDelete.name}?`)) {
       personService
         .delete(id)
-        .then(() => setPersons(persons.filter((person) => person.id !== id)));
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch(() => {
+          setMessage(
+            `Information of ${personToDelete.name} has already been removed from the server`
+          );
+          setPersons(persons.filter((person) => person.id !== id));
+          setMessageType("error");
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        });
     }
   };
 
@@ -87,6 +111,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} messageType={messageType} />
+
       <Filter onchange={handleQuery} value={query} />
       <h3>Add a new</h3>
       <PersonForm

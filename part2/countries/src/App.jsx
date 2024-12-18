@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import CountryDetails from "./CountryDetail";
+import CountryDetails from "./CountryDetails";
 
 const App = () => {
   const [allCountries, setAllCountries] = useState([]);

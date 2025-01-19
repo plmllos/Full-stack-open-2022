@@ -99,4 +99,20 @@ describe("favorite blog", () => {
       likes: 12,
     });
   });
+
+  test("The most blogs", () => {
+    const result = listHelper.mostBlogs(allBlogs);
+    assert.deepStrictEqual(result, {
+      author: "Robert C. Martin",
+      blogs: 3,
+    });
+  });
+
+  test("The most likes", () => {
+    const result = listHelper.mostLikes(allBlogs);
+    assert.deepStrictEqual(result, {
+      author: "Edsger W. Dijkstra",
+      likes: 17,
+    });
+  });
 });

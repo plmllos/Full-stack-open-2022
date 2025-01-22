@@ -48,6 +48,34 @@ describe("Blogs saved initially", () => {
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1);
     });
   });
+
+  describe("deleting a blog", () => {
+    test("succeeds with status code 204 if id is valid", async () => {
+      const [blogToDelete] = await helper.blogsInDb();
+
+      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+      const blogsAtEnd = await helper.blogsInDb();
+
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1);
+      assert(!blogsAtEnd.some((blog) => blog.id === blogToDelete.id));
+    });
+  });
+
+  describe("Updating a blog", () => {
+    test("updates the likes of a blog", async () => {
+      const [blogToUpdate] = await helper.blogsInDb();
+
+      const updatedLikes = { likes: blogToUpdate.likes + 1 };
+
+      const response = await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updatedLikes)
+        .expect(200);
+
+      assert.strictEqual(response.body.likes, updatedLikes.likes);
+    });
+  });
 });
 
 after(async () => {

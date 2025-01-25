@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI2Nzk0MTI3YjQ2YjM2NzBmMzRlMGExZGIiLCJpYXQiOjE3Mzc4NDQ5NDEsImV4cCI6MTczNzg0ODU0MX0.qJQxKonL3vD1trl7BZ07w58ngvIGw79oe7IfradmkMg
+
+{
+    "url": "www.ggd.com",
+    "author": "Neki autor",
+    "title": "Drugi blog broj",
+    "likes": 17
+}

@@ -12,6 +12,7 @@ const App = () => {
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState("success");
+
   useEffect(() => {
     personService.getAll().then((response) => {
       setPersons(response.data);
@@ -54,13 +55,22 @@ const App = () => {
           });
       }
     } else {
-      personService.create(newPerson).then((response) => {
-        setPersons(persons.concat(response.data));
-        setMessage(`Added ${newPerson.name}`);
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000);
-      });
+      personService
+        .create(newPerson)
+        .then((response) => {
+          setPersons([...persons, response.data]);
+          setMessage(`Added ${newPerson.name}`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          setMessage(error.response.data.error);
+          setMessageType("error");
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        });
     }
 
     setNewName("");

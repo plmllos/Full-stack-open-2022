@@ -126,7 +126,7 @@ const App = () => {
         .slice()
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <div key={blog.id}>
+          <div data-testid="blog" key={blog.id}>
             <Blog blog={blog}></Blog>
           </div>
         ))}

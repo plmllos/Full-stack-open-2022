@@ -16,10 +16,10 @@ const Blog = ({ blog, incrementLike }) => {
     setShowBlog(showBlog === id ? null : id)
   }
 
-   return (
+  return (
     <div style={blogStyle}>
       <div>
-         {blog.title}  {blog.author} 
+        {blog.title} {blog.author}
         <button onClick={() => showDetails(blog.id)}>
           {showBlog === blog.id ? 'hide' : 'view'}
         </button>
